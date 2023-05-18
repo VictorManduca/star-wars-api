@@ -1,0 +1,9 @@
+docs/
+src/test/**/*
+
+.*
+*.iml
+gradle
+src
+
+!build/docker
