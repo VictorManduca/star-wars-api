@@ -35,3 +35,4 @@ And the application will start already connected with the database
  - Spring
  - Postgres
  - Docker
+ - Swagger
