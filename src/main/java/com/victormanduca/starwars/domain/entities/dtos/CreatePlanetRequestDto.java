@@ -1,6 +1,9 @@
 package com.victormanduca.starwars.domain.entities.dtos;
 
-public class PlanetRequestDto {
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class CreatePlanetRequestDto {
   private String name;
   private String weather;
   private String terrain;

@@ -3,7 +3,8 @@ package com.victormanduca.starwars.domain.implementation;
 import com.victormanduca.starwars.domain.entities.PlanetEntity;
 import com.victormanduca.starwars.domain.entities.dtos.ApiResponseDto;
 import com.victormanduca.starwars.domain.entities.dtos.ApiResponsePlanetDto;
-import com.victormanduca.starwars.domain.entities.dtos.PlanetRequestDto;
+import com.victormanduca.starwars.domain.entities.dtos.CreatePlanetRequestDto;
+import com.victormanduca.starwars.domain.entities.dtos.UpdatePlanetRequestDto;
 import com.victormanduca.starwars.domain.entities.exceptions.PlanetNotFoundedException;
 import com.victormanduca.starwars.domain.usecase.IPlanet;
 import com.victormanduca.starwars.domain.usecase.IStarWarsApi;
@@ -11,6 +12,7 @@ import com.victormanduca.starwars.infra.repositories.IPlanetRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,7 +26,7 @@ public class PlanetImplementation implements IPlanet {
     this.starWarsApi = starWarsApi;
   }
 
-  public void create(PlanetRequestDto payload) throws Exception {
+  public void create(CreatePlanetRequestDto payload) throws Exception {
     final int appearedAmount = this.getAppearedFilms(payload.getName());
     final PlanetEntity planet = new PlanetEntity();
 
@@ -50,6 +52,21 @@ public class PlanetImplementation implements IPlanet {
 
   public void deleteBy(int id) {
     this.planetRepository.deleteById(id);
+  }
+
+  @Transactional
+  public void updateBy(int id, UpdatePlanetRequestDto payload) throws PlanetNotFoundedException {
+    PlanetEntity planet = this.planetRepository.findById(id).orElseThrow(PlanetNotFoundedException::new);
+
+    if (payload.getTerrain() != null) {
+      planet.setTerrain(payload.getTerrain());
+    }
+
+    if (payload.getWeather() != null) {
+      planet.setWeather(payload.getWeather());
+    }
+
+    this.planetRepository.save(planet);
   }
 
   private int getAppearedFilms(String planetName) throws Exception {

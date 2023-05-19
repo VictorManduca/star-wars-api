@@ -1,8 +1,9 @@
 package com.victormanduca.starwars.presentation;
 
 import com.victormanduca.starwars.domain.entities.PlanetEntity;
-import com.victormanduca.starwars.domain.entities.dtos.PlanetRequestDto;
+import com.victormanduca.starwars.domain.entities.dtos.CreatePlanetRequestDto;
 import com.victormanduca.starwars.domain.entities.dtos.PlanetResponseDto;
+import com.victormanduca.starwars.domain.entities.dtos.UpdatePlanetRequestDto;
 import com.victormanduca.starwars.domain.entities.exceptions.PlanetNotFoundedException;
 import com.victormanduca.starwars.domain.usecase.IPlanet;
 import jakarta.validation.Valid;
@@ -25,7 +26,7 @@ public class PlanetController {
   }
 
   @PostMapping
-  public ResponseEntity<String> create(@Valid @RequestBody PlanetRequestDto payload) {
+  public ResponseEntity<String> create(@Valid @RequestBody CreatePlanetRequestDto payload) {
     try {
       this.implementation.create(payload);
       return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -65,5 +66,17 @@ public class PlanetController {
   public ResponseEntity<String> deleteBy(@PathVariable int id) {
     this.implementation.deleteBy(id);
     return ResponseEntity.status(HttpStatus.OK).build();
+  }
+
+  @PatchMapping(value = "/{id}")
+  public ResponseEntity<String> updateBy(@PathVariable int id, @Valid @RequestBody UpdatePlanetRequestDto payload) {
+    try {
+      this.implementation.updateBy(id, payload);
+      return ResponseEntity.status(HttpStatus.OK).build();
+    } catch (PlanetNotFoundedException exception) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + exception.getMessage());
+    } catch (Exception exception) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + exception.getMessage());
+    }
   }
 }
