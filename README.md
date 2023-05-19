@@ -10,8 +10,19 @@ Requisites:
   - Number of times that a planet appeared in the movies, from the public Star Wars API (https://swapi.co/)
 
 Desirable functionalities:
-- Add a planet (name, weather and terrain)
-- List planets
-- Search by name
-- Search by ID
-- Remove a planet
+  - [x] Add a planet (name, weather and terrain)
+  - [X] List planets
+  - [X] Search by name
+  - [X] Search by ID
+  - [X] Remove a planet
+
+## Docs
+URLs
+- Swagger: http://localhost:8080/swagger-ui/index.html#/
+- Planet: http://localhost:8080/v1/planet
+
+Insomnia collections on docs/insomnia_collection
+
+
+
+
