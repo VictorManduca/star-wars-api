@@ -23,6 +23,15 @@ URLs
 
 Insomnia collections on docs/insomnia_collection
 
+### How to run the project
+Just need to run:
+```shell
+docker-compose up -d
+```
+And the application will start already connected with the database
 
-
-
+### Technologies
+ - Java 17
+ - Spring
+ - Postgres
+ - Docker
