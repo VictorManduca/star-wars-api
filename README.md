@@ -15,6 +15,7 @@ Desirable functionalities:
   - [X] Search by name
   - [X] Search by ID
   - [X] Remove a planet
+  - [X] Update a planet
 
 ## Docs
 URLs
