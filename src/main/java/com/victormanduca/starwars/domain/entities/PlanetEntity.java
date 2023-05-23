@@ -3,6 +3,7 @@ package com.victormanduca.starwars.domain.entities;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity(name = "planet")
 public class PlanetEntity implements Serializable {
@@ -68,5 +69,23 @@ public class PlanetEntity implements Serializable {
 
   public void setAppearedInFilms(int appearedInFilms) {
     this.appearedInFilms = appearedInFilms;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    PlanetEntity that = (PlanetEntity) o;
+    return Objects.equals(name, that.name);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(name);
+  }
+
+  @Override
+  public String toString() {
+    return "PlanetEntity{" + "id=" + id + ", name='" + name + '\'' + ", weather='" + weather + '\'' + ", terrain='" + terrain + '\'' + ", appearedInFilms=" + appearedInFilms + '}';
   }
 }
