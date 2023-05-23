@@ -11,10 +11,11 @@ Requisites:
 
 Desirable functionalities:
   - [x] Add a planet (name, weather and terrain)
-  - [X] List planets
+  - [X] List planets (with pagination)
   - [X] Search by name
   - [X] Search by ID
   - [X] Remove a planet
+  - [X] Update a planet
 
 ## Docs
 URLs
