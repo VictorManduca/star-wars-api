@@ -37,3 +37,4 @@ And the application will start already connected with the database
  - Postgres
  - Docker
  - Swagger
+ - JUnit
