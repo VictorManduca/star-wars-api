@@ -8,6 +8,14 @@ public class CreatePlanetRequestDto {
   private String weather;
   private String terrain;
 
+  public CreatePlanetRequestDto() {}
+
+  public CreatePlanetRequestDto(String name, String weather, String terrain) {
+    this.name = name;
+    this.weather = weather;
+    this.terrain = terrain;
+  }
+
   public String getName() {
     return name;
   }

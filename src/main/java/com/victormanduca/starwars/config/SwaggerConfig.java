@@ -7,6 +7,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
 @EnableWebMvc
-@OpenAPIDefinition(info = @Info(title = "Event booking api", version = "1.0", description = "API to manipulate events and its participants"))
+@OpenAPIDefinition(info = @Info(title = "StarWars API", version = "1.0", description = "API to manipulate StarWar's planet"))
 public class SwaggerConfig {
 }

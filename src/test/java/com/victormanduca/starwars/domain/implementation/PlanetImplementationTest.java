@@ -38,109 +38,80 @@ public class PlanetImplementationTest {
   public void testFindAll() {
     final Pageable pageable = Pageable.ofSize(10).withPage(0);
     final Page<PlanetEntity> page = Mockito.mock(Page.class);
-    final List<PlanetEntity> planets = List.of(buildPlanet());
 
-    Mockito.when(page.getContent()).thenReturn(planets);
+    Mockito.when(page.getContent()).thenReturn(List.of(buildPlanet()));
     Mockito.when(repository.findAll(pageable)).thenReturn(page);
 
     Page<PlanetEntity> result = implementation.findAll(pageable);
-    assertEquals(planets, result.getContent());
+    assertEquals(List.of(buildPlanet()), result.getContent());
   }
 
   @Test
   public void testFindByName() {
     final PlanetEntity planet = buildPlanet();
-    final List<PlanetEntity> planets = List.of(planet);
 
-    Mockito.when(repository.findByName(planet.getName())).thenReturn(planets);
-
+    Mockito.when(repository.findByName(planet.getName())).thenReturn(List.of(planet));
     List<PlanetEntity> result = implementation.findBy(planet.getName());
-    assertEquals(planets, result);
+
+    assertEquals(List.of(planet), result);
   }
 
   @Test
   public void testFindById() throws PlanetNotFoundedException {
-    final int requestId = 0;
     final PlanetEntity planet = buildPlanet();
 
-    Mockito.when(repository.findById(requestId)).thenReturn(Optional.of(planet));
+    Mockito.when(repository.findById(this.getRequestId())).thenReturn(Optional.of(planet));
+    PlanetEntity result = implementation.findBy(this.getRequestId());
 
-    PlanetEntity result = implementation.findBy(requestId);
     assertEquals(planet, result);
   }
 
   @Test
   public void testDeleteById() {
-    final int requestId = 0;
-    implementation.deleteBy(requestId);
-    Mockito.verify(repository, Mockito.times(1)).deleteById(requestId);
+    implementation.deleteBy(this.getRequestId());
+    Mockito.verify(repository, Mockito.times(1)).deleteById(this.getRequestId());
   }
 
   @Test
   public void testUpdateById() throws PlanetNotFoundedException {
-    final int requestId = 1;
     final UpdatePlanetRequestDto payload = buildUpdatePayload();
-    final PlanetEntity planet = buildPlanet();
-    final PlanetEntity updatedPlanet = updatedPlanet(payload);
 
-    Mockito.when(repository.findById(requestId)).thenReturn(Optional.of(planet));
+    Mockito.when(repository.findById(this.getRequestId())).thenReturn(Optional.of(buildPlanet()));
 
-    implementation.updateBy(requestId, payload);
+    implementation.updateBy(this.getRequestId(), payload);
 
-    Mockito.verify(repository, Mockito.times(1)).findById(requestId);
-    Mockito.verify(repository, Mockito.times(1)).save(updatedPlanet);
+    Mockito.verify(repository, Mockito.times(1)).findById(this.getRequestId());
+    Mockito.verify(repository, Mockito.times(1)).save(updatedPlanet(payload));
   }
 
   @Test
   public void testCreate() throws Exception {
     final CreatePlanetRequestDto payload = buildCreatePayload();
-    final ApiResponseDto apiResponse = buildApiStarWarsResponse();
-    final PlanetEntity planet = buildPlanet();
 
-    Mockito.when(starWarsApi.callPlanetApi(payload.getName())).thenReturn(apiResponse);
-
+    Mockito.when(starWarsApi.callPlanetApi(payload.getName())).thenReturn(buildApiStarWarsResponse());
     implementation.create(payload);
 
-    Mockito.verify(repository, Mockito.times(1)).save(planet);
+    Mockito.verify(repository, Mockito.times(1)).save(buildPlanet());
+  }
+
+  private int getRequestId() {
+    return 0;
   }
 
   private PlanetEntity buildPlanet() {
-    final PlanetEntity planet = new PlanetEntity();
-    planet.setId(0);
-    planet.setWeather("arid");
-    planet.setTerrain("desert");
-    planet.setName("Utapau");
-    planet.setAppearedInFilms(1);
-
-    return planet;
+    return new PlanetEntity(0, "Utapau", "arid", "desert", 1);
   }
 
   private PlanetEntity updatedPlanet(UpdatePlanetRequestDto payload) {
-    final PlanetEntity planet = new PlanetEntity();
-    planet.setId(0);
-    planet.setWeather(payload.getWeather());
-    planet.setTerrain(payload.getTerrain());
-    planet.setName("Utapau");
-    planet.setAppearedInFilms(1);
-
-    return planet;
+    return new PlanetEntity(0, "Utapau", payload.getWeather(), payload.getTerrain(), 1);
   }
 
   private UpdatePlanetRequestDto buildUpdatePayload() {
-    final UpdatePlanetRequestDto payload = new UpdatePlanetRequestDto();
-    payload.setWeather("frozen");
-    payload.setTerrain("terrainProperty");
-
-    return payload;
+    return new UpdatePlanetRequestDto("frozen", "terrainProperty");
   }
 
   private CreatePlanetRequestDto buildCreatePayload() {
-    final CreatePlanetRequestDto payload = new CreatePlanetRequestDto();
-    payload.setWeather("frozen");
-    payload.setTerrain("terrainProperty");
-    payload.setName("Utapau");
-
-    return payload;
+    return new CreatePlanetRequestDto("Utapau", "frozen", "terrainProperty");
   }
 
   private ApiResponseDto buildApiStarWarsResponse() {

@@ -15,23 +15,22 @@ import java.net.http.HttpResponse;
 public class StarWarsApiImplementation implements IStarWarsApi {
 
   public ApiResponseDto callPlanetApi(String planetName) throws Exception {
-    String url = "https://swapi.dev/api/planets/?search=" + planetName;
-    final HttpRequest request = HttpRequest.newBuilder()
-            .GET()
-            .uri(URI.create(url))
-            .build();
+    return this.buildResponseBody(this.getApiResponse(planetName));
+  }
 
-    final String response = HttpClient
-            .newBuilder()
-            .build()
-            .send(request, HttpResponse.BodyHandlers.ofString())
-            .body();
+  private HttpRequest buildRequest(String planetName) {
+    return HttpRequest.newBuilder().GET()
+      .uri(URI.create("https://swapi.dev/api/planets/?search=" + planetName))
+      .build();
+  }
 
-    return this.buildResponseBody(response);
+  private String getApiResponse(String planetName) throws Exception {
+    return HttpClient.newBuilder().build()
+      .send(this.buildRequest(planetName), HttpResponse.BodyHandlers.ofString())
+      .body();
   }
 
   private ApiResponseDto buildResponseBody(String apiResponseBody) throws JsonProcessingException {
-    ObjectMapper objectMapper = new ObjectMapper();
-    return objectMapper.readValue(apiResponseBody, ApiResponseDto.class);
+    return new ObjectMapper().readValue(apiResponseBody, ApiResponseDto.class);
   }
 }

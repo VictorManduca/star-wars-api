@@ -1,7 +1,6 @@
 package com.victormanduca.starwars.domain.implementation;
 
 import com.victormanduca.starwars.domain.entities.PlanetEntity;
-import com.victormanduca.starwars.domain.entities.dtos.ApiResponseDto;
 import com.victormanduca.starwars.domain.entities.dtos.ApiResponsePlanetDto;
 import com.victormanduca.starwars.domain.entities.dtos.CreatePlanetRequestDto;
 import com.victormanduca.starwars.domain.entities.dtos.UpdatePlanetRequestDto;
@@ -27,13 +26,12 @@ public class PlanetImplementation implements IPlanet {
   }
 
   public void create(CreatePlanetRequestDto payload) throws Exception {
-    final int appearedAmount = this.getAppearedFilms(payload.getName());
     final PlanetEntity planet = new PlanetEntity();
 
     planet.setName(payload.getName());
     planet.setTerrain(payload.getTerrain());
     planet.setWeather(payload.getWeather());
-    planet.setAppearedInFilms(appearedAmount);
+    planet.setAppearedInFilms(this.getAppearedFilms(payload.getName()));
 
     this.planetRepository.save(planet);
   }
@@ -70,8 +68,7 @@ public class PlanetImplementation implements IPlanet {
   }
 
   private int getAppearedFilms(String planetName) throws Exception {
-    final ApiResponseDto response = starWarsApi.callPlanetApi(planetName);
-    final List<ApiResponsePlanetDto> apiResults = response.getResults();
+    final List<ApiResponsePlanetDto> apiResults = starWarsApi.callPlanetApi(planetName).getResults();
 
     if (apiResults.size() != 1) {
       throw new PlanetNotFoundedException();

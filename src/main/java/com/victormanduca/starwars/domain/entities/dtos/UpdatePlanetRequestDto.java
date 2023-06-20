@@ -7,6 +7,14 @@ public class UpdatePlanetRequestDto {
   private String weather;
   private String terrain;
 
+  public UpdatePlanetRequestDto() {
+  }
+
+  public UpdatePlanetRequestDto(String weather, String terrain) {
+    this.weather = weather;
+    this.terrain = terrain;
+  }
+
   public String getWeather() {
     return weather;
   }
